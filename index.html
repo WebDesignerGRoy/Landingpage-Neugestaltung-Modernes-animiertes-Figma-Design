@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="X1 Quiz Show – das neue interaktive Live-Event im Kino. Spannung, Wissen und Entertainment auf der großen Leinwand.">
+  <meta name="theme-color" content="#090909">
+  <title>X1 Quiz Show — Das neue Live-Event im Kino</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+    :root {
+      --bg: #090909;
+      --surface: #111111;
+      --surface-2: #171717;
+      --text: #f5f3ed;
+      --muted: #a9a79f;
+      --line: rgba(255, 255, 255, 0.14);
+      --lime: #d7ff3f;
+      --orange: #ff6433;
+      --blue: #5877ff;
+      --header-height: 82px;
+      --radius: 1.5rem;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: var(--header-height);
+    }
+
+    body {
+      overflow-x: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Inter", sans-serif;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body.menu-open {
+      overflow: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      color: inherit;
+    }
+
+    img,
+    video {
+      display: block;
+      max-width: 100%;
+    }
+
+    ::selection {
+      color: #090909;
+      background: var(--lime);
+    }
+
+    .container {
+      width: min(1360px, calc(100% - 64px));
+      margin-inline: auto;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--lime);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      width: 1.5rem;
+      height: 2px;
+      background: currentColor;
+      content: "";
+    }
+
+    .display-title {
+      max-width: 1100px;
+      margin-top: 1.5rem;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(3rem, 7.2vw, 7.8rem);
+      font-weight: 600;
+      letter-spacing: -0.07em;
+      line-height: 0.9;
+    }
+
+    .display-title em {
+      color: var(--lime);
+      font-family: Georgia, serif;
+      font-weight: 400;
+    }
+
+    .section-title {
+      max-width: 900px;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(2.7rem, 5.5vw, 6.5rem);
+      font-weight: 600;
+      letter-spacing: -0.065em;
+      line-height: 0.94;
+    }
+
+    .section-copy {
+      max-width: 620px;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.35vw, 1.25rem);
+      line-height: 1.65;
+    }
+
+    .site-header {
+      position: fixed;
+      z-index: 100;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: var(--header-height);
+      border-bottom: 1px solid transparent;
+      transition: background 0.35s ease, border-color 0.35s ease, height 0.35s ease;
+    }
+
+    .site-header.scrolled {
+      height: 68px;
+      border-color: var(--line);
+      background: rgba(9, 9, 9, 0.84);
+      backdrop-filter: blur(18px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: min(1480px, calc(100% - 48px));
+      height: 100%;
+      margin-inline: auto;
+    }
+
+    .logo {
+      position: relative;
+      z-index: 102;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 1.55rem;
+      font-weight: 700;
+      letter-spacing: -0.08em;
+    }
+
+    .logo-mark {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 0.95rem;
+      letter-spacing: -0.06em;
+    }
+
+    .desktop-nav {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .desktop-nav a {
+      position: relative;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.25s ease;
+    }
+
+    .desktop-nav a::after {
+      position: absolute;
+      right: 0;
+      bottom: -7px;
+      left: 0;
+      height: 1px;
+      background: var(--lime);
+      content: "";
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s ease;
+    }
+
+    .desktop-nav a:hover,
+    .desktop-nav a.active {
+      color: #fff;
+    }
+
+    .desktop-nav a:hover::after,
+    .desktop-nav a.active::after {
+      transform: scaleX(1);
+    }
+
+    .header-cta {
+      padding: 0.85rem 1.25rem;
+      border: 1px solid var(--lime);
+      border-radius: 999px;
+      background: var(--lime);
+      color: #080808 !important;
+    }
+
+    .header-cta::after {
+      display: none;
+    }
+
+    .menu-toggle {
+      position: relative;
+      z-index: 102;
+      display: none;
+      width: 44px;
+      height: 44px;
+      cursor: pointer;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .menu-toggle span {
+      position: absolute;
+      left: 12px;
+      width: 18px;
+      height: 1px;
+      background: #fff;
+      transition: 0.3s ease;
+    }
+
+    .menu-toggle span:first-child {
+      top: 17px;
+    }
+
+    .menu-toggle span:last-child {
+      top: 25px;
+    }
+
+    .menu-open .menu-toggle span:first-child {
+      top: 21px;
+      transform: rotate(45deg);
+    }
+
+    .menu-open .menu-toggle span:last-child {
+      top: 21px;
+      transform: rotate(-45deg);
+    }
+
+    .mobile-menu {
+      position: fixed;
+      z-index: 99;
+      inset: 0;
+      display: flex;
+      visibility: hidden;
+      flex-direction: column;
+      justify-content: center;
+      padding: 7rem 2rem 3rem;
+      background: #0a0a0a;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: 0.35s ease;
+    }
+
+    .menu-open .mobile-menu {
+      visibility: visible;
+      opacity: 1;
+      transform: none;
+    }
+
+    .mobile-menu a {
+      padding: 0.5rem 0;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(2.5rem, 11vw, 4.5rem);
+      font-weight: 600;
+      letter-spacing: -0.06em;
+    }
+
+    .mobile-menu small {
+      margin-top: auto;
+      color: var(--muted);
+    }
+
+    .hero {
+      position: relative;
+      display: flex;
+      min-height: 100svh;
+      align-items: flex-end;
+      overflow: hidden;
+      padding: 9rem 0 3rem;
+      background: #080808;
+    }
+
+    .hero-video,
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .hero-video {
+      opacity: 0.6;
+      object-fit: cover;
+      filter: saturate(0.75) contrast(1.08);
+    }
+
+    .hero-overlay {
+      background:
+        linear-gradient(90deg, rgba(7, 7, 7, 0.94) 0%, rgba(7, 7, 7, 0.5) 52%, rgba(7, 7, 7, 0.2) 100%),
+        linear-gradient(0deg, #090909 0%, transparent 45%, rgba(0, 0, 0, 0.25) 100%);
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: 13%;
+      right: -8%;
+      width: 45vw;
+      height: 45vw;
+      border-radius: 50%;
+      background: rgba(215, 255, 63, 0.13);
+      filter: blur(110px);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-content .display-title {
+      max-width: 1200px;
+    }
+
+    .hero-intro {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: end;
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.35);
+    }
+
+    .hero-intro p {
+      max-width: 570px;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: clamp(1rem, 1.5vw, 1.3rem);
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+    }
+
+    .button {
+      display: inline-flex;
+      min-height: 54px;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      padding: 0 1.4rem;
+      cursor: pointer;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: transparent;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      transition: color 0.25s ease, background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .button-primary {
+      border-color: var(--lime);
+      background: var(--lime);
+      color: #090909;
+    }
+
+    .button-dark:hover,
+    .button-outline:hover {
+      border-color: #fff;
+      background: #fff;
+      color: #090909;
+    }
+
+    .scroll-marker {
+      position: absolute;
+      z-index: 3;
+      right: 1.5rem;
+      bottom: 3rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 0.67rem;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+      writing-mode: vertical-rl;
+    }
+
+    .scroll-line {
+      position: relative;
+      width: 1px;
+      height: 72px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .scroll-line::after {
+      position: absolute;
+      top: -100%;
+      width: 100%;
+      height: 100%;
+      background: var(--lime);
+      content: "";
+      animation: scrollDown 2s infinite;
+    }
+
+    @keyframes scrollDown {
+      to { transform: translateY(200%); }
+    }
+
+    .experience {
+      padding: 9rem 0;
+    }
+
+    .experience-heading {
+      display: grid;
+      grid-template-columns: minmax(160px, 0.35fr) 1fr;
+      gap: 4rem;
+    }
+
+    .experience-heading .eyebrow {
+      align-self: start;
+      margin-top: 0.7rem;
+    }
+
+    .experience-copy {
+      display: grid;
+      grid-template-columns: 1fr 0.6fr;
+      gap: 4rem;
+      align-items: end;
+      margin-top: 4rem;
+      margin-left: calc(35% + 2.6rem);
+    }
+
+    .text-link {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 0.75rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid currentColor;
+      font-weight: 600;
+      transition: color 0.25s ease;
+    }
+
+    .text-link:hover {
+      color: var(--lime);
+    }
+
+    .cinema-frame {
+      position: relative;
+      min-height: 520px;
+      margin-top: 5rem;
+      overflow: hidden;
+      border-radius: var(--radius);
+      background:
+        radial-gradient(circle at 50% 35%, rgba(88, 119, 255, 0.26), transparent 35%),
+        #121212;
+    }
+
+    .cinema-frame video {
+      width: 100%;
+      height: 100%;
+      min-height: 520px;
+      object-fit: cover;
+      opacity: 0.72;
+    }
+
+    .frame-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 2rem;
+      background: linear-gradient(0deg, rgba(0, 0, 0, 0.85), transparent 60%);
+    }
+
+    .live-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.6rem 0.85rem;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.4);
+      font-size: 0.74rem;
+      font-weight: 700;
+      backdrop-filter: blur(12px);
+    }
+
+    .live-pill::before {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--orange);
+      box-shadow: 0 0 0 6px rgba(255, 100, 51, 0.15);
+      content: "";
+      animation: pulse 1.6s infinite;
+    }
+
+    @keyframes pulse {
+      50% { box-shadow: 0 0 0 11px rgba(255, 100, 51, 0); }
+    }
+
+    .frame-caption {
+      text-align: right;
+    }
+
+    .frame-caption strong {
+      display: block;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(2rem, 5vw, 5rem);
+      letter-spacing: -0.06em;
+    }
+
+    .frame-caption span {
+      color: var(--muted);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .feature {
+      position: relative;
+      min-height: 100vh;
+      overflow: hidden;
+      padding: 8rem 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+
+    .feature-meta {
+      display: flex;
+      gap: 0.65rem;
+      align-items: center;
+      margin-bottom: 2rem;
+      color: var(--lime);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+    }
+
+    .feature-meta span:first-child {
+      display: grid;
+      width: 36px;
+      height: 36px;
+      place-items: center;
+      border: 1px solid rgba(215, 255, 63, 0.45);
+      border-radius: 50%;
+    }
+
+    .feature .section-title {
+      font-size: clamp(3rem, 6vw, 6.8rem);
+    }
+
+    .feature .section-copy {
+      margin-top: 2rem;
+    }
+
+    .visual-card {
+      position: relative;
+      min-height: 620px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+    }
+
+    .countdown-visual {
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(215, 255, 63, 0.13), transparent 35%),
+        repeating-linear-gradient(90deg, transparent 0, transparent 79px, rgba(255,255,255,.035) 80px),
+        repeating-linear-gradient(0deg, transparent 0, transparent 79px, rgba(255,255,255,.035) 80px),
+        #10100e;
+    }
+
+    .countdown-ring {
+      position: relative;
+      display: grid;
+      width: min(390px, 65vw);
+      aspect-ratio: 1;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+    }
+
+    .countdown-ring::before,
+    .countdown-ring::after {
+      position: absolute;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: inherit;
+      content: "";
+    }
+
+    .countdown-ring::before {
+      inset: 11%;
+    }
+
+    .countdown-ring::after {
+      inset: -8%;
+      border-style: dashed;
+      animation: spin 18s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .countdown-number {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(8rem, 15vw, 13rem);
+      font-weight: 600;
+      letter-spacing: -0.09em;
+      line-height: 1;
+    }
+
+    .countdown-label {
+      position: absolute;
+      bottom: 1.5rem;
+      color: var(--lime);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+    }
+
+    .visual-badge {
+      position: absolute;
+      top: 1.5rem;
+      left: 1.5rem;
+    }
+
+    .interaction-visual {
+      padding: 2rem;
+      background:
+        radial-gradient(circle at 85% 10%, rgba(88, 119, 255, 0.28), transparent 35%),
+        #101010;
+    }
+
+    .quiz-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .quiz-timer {
+      color: var(--lime);
+    }
+
+    .question {
+      max-width: 600px;
+      margin: 5rem auto 2.5rem;
+      text-align: center;
+    }
+
+    .question small {
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .question h3 {
+      margin-top: 1rem;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(2rem, 4vw, 3.8rem);
+      letter-spacing: -0.05em;
+      line-height: 1.05;
+    }
+
+    .answer-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.8rem;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .answer {
+      min-height: 78px;
+      padding: 1rem;
+      cursor: pointer;
+      border: 1px solid var(--line);
+      border-radius: 1rem;
+      background: rgba(255, 255, 255, 0.04);
+      text-align: left;
+      transition: 0.25s ease;
+    }
+
+    .answer:hover {
+      border-color: rgba(215, 255, 63, 0.7);
+      transform: translateY(-2px);
+    }
+
+    .answer.selected {
+      border-color: var(--lime);
+      background: var(--lime);
+      color: #090909;
+    }
+
+    .answer.wrong {
+      border-color: var(--orange);
+      background: rgba(255, 100, 51, 0.18);
+    }
+
+    .answer span {
+      display: inline-grid;
+      width: 27px;
+      height: 27px;
+      margin-right: 0.5rem;
+      place-items: center;
+      border: 1px solid currentColor;
+      border-radius: 50%;
+      font-size: 0.7rem;
+    }
+
+    .quiz-message {
+      min-height: 1.5rem;
+      margin-top: 1.5rem;
+      color: var(--lime);
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .competition-section {
+      background: var(--lime);
+      color: #090909;
+    }
+
+    .competition-section .feature-meta,
+    .competition-section .section-copy {
+      color: rgba(9, 9, 9, 0.65);
+    }
+
+    .competition-section .feature-meta span:first-child {
+      border-color: rgba(9, 9, 9, 0.3);
+    }
+
+    .scoreboard {
+      min-height: 640px;
+      padding: 2rem;
+      border-color: rgba(9, 9, 9, 0.2);
+      background: #0d0d0d;
+      color: #fff;
+    }
+
+    .scoreboard-head {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+    }
+
+    .scoreboard-head span:last-child {
+      color: var(--lime);
+    }
+
+    .score-row {
+      display: grid;
+      grid-template-columns: 58px 1fr auto;
+      gap: 1rem;
+      align-items: center;
+      padding: 1.2rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      transition: background 0.25s ease, padding 0.25s ease;
+    }
+
+    .score-row:first-of-type {
+      padding-inline: 1rem;
+      border-radius: 1rem;
+      background: var(--lime);
+      color: #090909;
+    }
+
+    .rank {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .player {
+      font-weight: 600;
+    }
+
+    .player small {
+      display: block;
+      margin-top: 0.2rem;
+      color: inherit;
+      font-size: 0.7rem;
+      font-weight: 400;
+      opacity: 0.6;
+    }
+
+    .points {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .score-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      margin-top: 2.5rem;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 1rem;
+      background: rgba(255,255,255,.13);
+    }
+
+    .score-stat {
+      padding: 1.2rem;
+      background: #111;
+    }
+
+    .score-stat strong {
+      display: block;
+      color: var(--lime);
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 2rem;
+      letter-spacing: -0.05em;
+    }
+
+    .score-stat span {
+      color: var(--muted);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+    }
+
+    .digital-visual {
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 50% 70%, rgba(88, 119, 255, 0.35), transparent 40%),
+        #111;
+    }
+
+    .phone {
+      position: relative;
+      width: min(300px, 72%);
+      min-height: 560px;
+      padding: 0.65rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 2.7rem;
+      background: #050505;
+      box-shadow: 0 30px 70px rgba(0,0,0,.55);
+      transform: rotate(-3deg);
+      transition: transform 0.4s ease;
+    }
+
+    .digital-visual:hover .phone {
+      transform: rotate(0) translateY(-5px);
+    }
+
+    .phone-screen {
+      display: flex;
+      min-height: 540px;
+      flex-direction: column;
+      overflow: hidden;
+      padding: 2rem 1.3rem 1.3rem;
+      border-radius: 2.2rem;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(215, 255, 63, 0.22), transparent 30%),
+        #151515;
+    }
+
+    .phone-notch {
+      position: absolute;
+      top: 0.9rem;
+      left: 50%;
+      width: 80px;
+      height: 22px;
+      border-radius: 999px;
+      background: #050505;
+      transform: translateX(-50%);
+    }
+
+    .phone-logo {
+      margin-top: 1rem;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .phone-screen h3 {
+      margin-top: auto;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 2.25rem;
+      letter-spacing: -0.06em;
+      line-height: 1;
+    }
+
+    .phone-screen p {
+      margin-top: 1rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .join-code {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.4rem;
+      margin: 1.5rem 0;
+    }
+
+    .join-code span {
+      display: grid;
+      aspect-ratio: 1;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 0.65rem;
+      background: rgba(255,255,255,.06);
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .phone-button {
+      padding: 1rem;
+      border: 0;
+      border-radius: 0.85rem;
+      background: var(--lime);
+      color: #090909;
+      font-weight: 700;
+    }
+
+    .floating-label {
+      position: absolute;
+      padding: 0.7rem 1rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(20,20,20,.8);
+      font-size: 0.7rem;
+      font-weight: 700;
+      backdrop-filter: blur(12px);
+    }
+
+    .label-one {
+      top: 22%;
+      left: 8%;
+    }
+
+    .label-two {
+      right: 7%;
+      bottom: 18%;
+      color: var(--lime);
+    }
+
+    .final {
+      position: relative;
+      display: grid;
+      min-height: 100svh;
+      place-items: center;
+      overflow: hidden;
+      padding: 8rem 0 3rem;
+      text-align: center;
+    }
+
+    .final::before {
+      position: absolute;
+      width: 70vw;
+      height: 70vw;
+      border: 1px solid rgba(215, 255, 63, 0.16);
+      border-radius: 50%;
+      content: "";
+      box-shadow:
+        0 0 0 8vw rgba(215,255,63,.025),
+        0 0 0 16vw rgba(215,255,63,.015);
+      animation: breathe 4s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      50% { transform: scale(1.04); opacity: 0.65; }
+    }
+
+    .final-content {
+      position: relative;
+      z-index: 2;
+      width: min(1050px, 100%);
+    }
+
+    .final .eyebrow {
+      justify-content: center;
+    }
+
+    .final .section-title {
+      max-width: 1000px;
+      margin: 1.5rem auto;
+      font-size: clamp(3.6rem, 8.5vw, 9rem);
+    }
+
+    .final .section-copy {
+      margin: 0 auto;
+    }
+
+    .final-actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2.5rem;
+    }
+
+    .next-round {
+      display: inline-grid;
+      width: 110px;
+      height: 110px;
+      margin-top: 4rem;
+      place-items: center;
+      border: 1px solid var(--lime);
+      border-radius: 50%;
+      color: var(--lime);
+      font-size: 1.7rem;
+      transition: 0.3s ease;
+    }
+
+    .next-round:hover {
+      background: var(--lime);
+      color: #090909;
+      transform: rotate(45deg);
+    }
+
+    .footer {
+      position: relative;
+      z-index: 2;
+      width: min(1360px, calc(100% - 64px));
+      margin-top: auto;
+      padding-top: 2rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(42px);
+      transition: opacity 0.8s cubic-bezier(.2,.7,.2,1), transform 0.8s cubic-bezier(.2,.7,.2,1);
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    .progress {
+      position: fixed;
+      z-index: 110;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      transform: scaleX(0);
+      transform-origin: left;
+      background: var(--lime);
+    }
+
+    @media (max-width: 980px) {
+      .container {
+        width: min(100% - 40px, 1360px);
+      }
+
+      .desktop-nav {
+        display: none;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+
+      .hero-intro,
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-actions {
+        justify-content: flex-start;
+      }
+
+      .experience-heading {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .experience-copy {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        margin-left: 0;
+      }
+
+      .feature-grid {
+        gap: 3rem;
+      }
+
+      .visual-card {
+        min-height: 560px;
+      }
+
+      .competition-section .feature-content {
+        order: 0;
+      }
+
+      .competition-section .visual-card {
+        order: 1;
+      }
+
+      .scroll-marker {
+        display: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      :root {
+        --header-height: 70px;
+        --radius: 1.1rem;
+      }
+
+      .container {
+        width: calc(100% - 32px);
+      }
+
+      .header-inner {
+        width: calc(100% - 28px);
+      }
+
+      .hero {
+        min-height: 100svh;
+        padding: 7.5rem 0 2rem;
+      }
+
+      .hero-overlay {
+        background:
+          linear-gradient(0deg, #090909 0%, rgba(7,7,7,.42) 65%, rgba(7,7,7,.65) 100%),
+          linear-gradient(90deg, rgba(7,7,7,.7), transparent);
+      }
+
+      .display-title {
+        font-size: clamp(3.1rem, 15vw, 5.2rem);
+      }
+
+      .hero-intro {
+        gap: 1.5rem;
+        margin-top: 2rem;
+      }
+
+      .hero-actions,
+      .final-actions {
+        flex-direction: column;
+      }
+
+      .hero-actions .button,
+      .final-actions .button {
+        width: 100%;
+      }
+
+      .experience,
+      .feature {
+        min-height: auto;
+        padding: 6rem 0;
+      }
+
+      .section-title,
+      .feature .section-title {
+        font-size: clamp(2.8rem, 13vw, 4.6rem);
+      }
+
+      .cinema-frame,
+      .cinema-frame video {
+        min-height: 430px;
+      }
+
+      .frame-overlay {
+        padding: 1.2rem;
+      }
+
+      .visual-card {
+        min-height: 500px;
+      }
+
+      .interaction-visual,
+      .scoreboard {
+        padding: 1.2rem;
+      }
+
+      .question {
+        margin-top: 4rem;
+      }
+
+      .answer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .answer {
+        min-height: 62px;
+      }
+
+      .score-row {
+        grid-template-columns: 40px 1fr auto;
+      }
+
+      .score-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .score-stat {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .phone {
+        min-height: 510px;
+      }
+
+      .phone-screen {
+        min-height: 490px;
+      }
+
+      .floating-label {
+        display: none;
+      }
+
+      .final::before {
+        width: 110vw;
+        height: 110vw;
+      }
+
+      .final .section-title {
+        font-size: clamp(3.2rem, 16vw, 5.5rem);
+      }
+
+      .footer {
+        width: calc(100% - 32px);
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+
+      .footer-links {
+        justify-content: center;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="progress" id="progress"></div>
+
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner">
+      <a class="logo" href="#top" aria-label="X1 Startseite">
+        <span class="logo-mark">X1</span>
+        <span>QUIZ SHOW</span>
+      </a>
+
+      <nav class="desktop-nav" aria-label="Hauptnavigation">
+        <a href="#erlebnis">Erlebnis</a>
+        <a href="#spannung">Spannung</a>
+        <a href="#interaktion">Interaktion</a>
+        <a href="#digital">Teilnehmen</a>
+        <a class="header-cta" href="#finale">Nächste Runde ↗</a>
+      </nav>
+
+      <button class="menu-toggle" type="button" aria-label="Menü öffnen" aria-expanded="false">
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <nav class="mobile-menu" aria-label="Mobile Navigation">
+    <a href="#erlebnis">Erlebnis</a>
+    <a href="#spannung">Spannung</a>
+    <a href="#interaktion">Interaktion</a>
+    <a href="#wettbewerb">Wettbewerb</a>
+    <a href="#digital">Teilnehmen</a>
+    <a href="#finale">Final Round</a>
+    <small>X1 Quiz Show — Live im Kino</small>
+  </nav>
+
+  <main>
+    <section class="hero" id="top">
+      <video class="hero-video" autoplay muted loop playsinline preload="metadata">
+        <source src="https://devatikmasud.github.io/Neugestaltung-website/assets/Video%2001.mp4" type="video/mp4">
+      </video>
+      <div class="hero-overlay"></div>
+      <div class="hero-glow"></div>
+
+      <div class="container hero-content">
+        <p class="eyebrow reveal">Das neue Live-Event im Kino</p>
+        <h1 class="display-title reveal">
+          Die erste Quiz Show der Welt, <em>bei der das ganze Kino mitspielt.</em>
+        </h1>
+
+        <div class="hero-intro reveal">
+          <p>Spannung, Wissen und Entertainment auf der großen Leinwand – gemeinsam erlebt und live gespielt.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#erlebnis">Show entdecken <span>↓</span></a>
+            <button class="button button-dark" id="soundToggle" type="button" aria-label="Video-Ton ein- oder ausschalten">
+              <span id="soundIcon">◉</span> Ton aktivieren
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="scroll-marker" aria-hidden="true">
+        <span>01 — 07 SCROLLEN</span>
+        <span class="scroll-line"></span>
+      </div>
+    </section>
+
+    <section class="experience" id="erlebnis">
+      <div class="container">
+        <div class="experience-heading">
+          <p class="eyebrow reveal">Das Erlebnis</p>
+          <h2 class="section-title reveal">Das ganze Kino wird zum Spielfeld.</h2>
+        </div>
+
+        <div class="experience-copy reveal">
+          <p class="section-copy">
+            X1 verbindet die Energie einer Live-Show mit der Atmosphäre des Kinos. Jeder Gast kann mitmachen, mitfiebern und Teil des Moments werden.
+          </p>
+          <a class="text-link" href="#interaktion">So funktioniert X1 ↗</a>
+        </div>
+
+        <div class="cinema-frame reveal">
+          <video autoplay muted loop playsinline preload="metadata">
+            <source src="https://devatikmasud.github.io/Neugestaltung-website/assets/Video%2001.mp4" type="video/mp4">
+          </video>
+          <div class="frame-overlay">
+            <span class="live-pill">LIVE IM KINO</span>
+            <div class="frame-caption">
+              <strong>1 Saal.</strong>
+              <span>Ein gemeinsamer Moment</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="feature" id="spannung">
+      <div class="container feature-grid">
+        <div class="feature-content reveal">
+          <div class="feature-meta">
+            <span>01</span>
+            <span>/ SPANNUNG</span>
+          </div>
+          <h2 class="section-title">Jede Sekunde zählt.</h2>
+          <p class="section-copy">
+            Countdowns, Fragen und Entscheidungen bauen Spannung auf und führen das Publikum Runde für Runde durch die Show.
+          </p>
+        </div>
+
+        <div class="visual-card countdown-visual reveal">
+          <span class="live-pill visual-badge">LIVE</span>
+          <div class="countdown-ring">
+            <strong class="countdown-number" id="countdown">10</strong>
+            <span class="countdown-label">SPANNUNG AUF DER LEINWAND</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="feature" id="interaktion">
+      <div class="container feature-grid">
+        <div class="visual-card interaction-visual reveal">
+          <div class="quiz-top">
+            <span>X1 / RUNDE 04</span>
+            <span class="quiz-timer">● LIVE</span>
+          </div>
+
+          <div class="question">
+            <small>Publikumsfrage</small>
+            <h3>Welcher Planet ist der Sonne am nächsten?</h3>
+          </div>
+
+          <div class="answer-grid" role="group" aria-label="Quizantworten">
+            <button class="answer" type="button" data-correct="false"><span>A</span> Venus</button>
+            <button class="answer" type="button" data-correct="true"><span>B</span> Merkur</button>
+            <button class="answer" type="button" data-correct="false"><span>C</span> Mars</button>
+            <button class="answer" type="button" data-correct="false"><span>D</span> Erde</button>
+          </div>
+          <p class="quiz-message" id="quizMessage" aria-live="polite">Wähle deine Antwort.</p>
+        </div>
+
+        <div class="feature-content reveal">
+          <div class="feature-meta">
+            <span>02</span>
+            <span>/ INTERAKTION</span>
+          </div>
+          <h2 class="section-title">Fragen. Mitfiebern.</h2>
+          <p class="section-copy">
+            Die Show reagiert auf das Publikum und macht aus einer normalen Kinovorstellung ein gemeinsames Live-Erlebnis.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="feature competition-section" id="wettbewerb">
+      <div class="container feature-grid">
+        <div class="feature-content reveal">
+          <div class="feature-meta">
+            <span>03</span>
+            <span>/ WETTBEWERB</span>
+          </div>
+          <h2 class="section-title">Jede Runde zählt.</h2>
+          <p class="section-copy">
+            Ergebnisse, Punkte und Platzierungen sorgen für echten Wettbewerb – direkt sichtbar und gemeinsam erlebt.
+          </p>
+        </div>
+
+        <div class="visual-card scoreboard reveal">
+          <div class="scoreboard-head">
+            <span>LIVE ERGEBNISSE</span>
+            <span>RUNDE 08 / 10</span>
+          </div>
+
+          <div class="score-row">
+            <span class="rank">01</span>
+            <span class="player">Team Nordlicht<small>8 richtige Antworten</small></span>
+            <span class="points" data-points="8640">8.640</span>
+          </div>
+          <div class="score-row">
+            <span class="rank">02</span>
+            <span class="player">Reihe Sieben<small>7 richtige Antworten</small></span>
+            <span class="points" data-points="8210">8.210</span>
+          </div>
+          <div class="score-row">
+            <span class="rank">03</span>
+            <span class="player">Die Filmfans<small>7 richtige Antworten</small></span>
+            <span class="points" data-points="7890">7.890</span>
+          </div>
+          <div class="score-row">
+            <span class="rank">04</span>
+            <span class="player">Popcorn Club<small>6 richtige Antworten</small></span>
+            <span class="points" data-points="7420">7.420</span>
+          </div>
+
+          <div class="score-stats">
+            <div class="score-stat"><strong>LIVE</strong><span>Ergebnisse</span></div>
+            <div class="score-stat"><strong>01</strong><span>Gewinner</span></div>
+            <div class="score-stat"><strong>∞</strong><span>Runden</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="feature" id="digital">
+      <div class="container feature-grid">
+        <div class="visual-card digital-visual reveal">
+          <span class="floating-label label-one">MOBILE</span>
+          <span class="floating-label label-two">LIVE INTERACTIVE</span>
+
+          <div class="phone">
+            <span class="phone-notch"></span>
+            <div class="phone-screen">
+              <span class="phone-logo">X1</span>
+              <h3>Bereit zum Mitspielen?</h3>
+              <p>Gib den Code von der Kinoleinwand ein und werde Teil der Show.</p>
+              <div class="join-code" aria-label="Spielcode 1901">
+                <span>1</span><span>9</span><span>0</span><span>1</span>
+              </div>
+              <button class="phone-button" id="joinButton" type="button">Jetzt beitreten</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-content reveal">
+          <div class="feature-meta">
+            <span>04</span>
+            <span>/ DIGITAL</span>
+          </div>
+          <h2 class="section-title">Einfach teilnehmen. Direkt erleben.</h2>
+          <p class="section-copy">
+            Die digitale Interaktion ist schnell verständlich und für das gemeinsame Spielen im Kino entwickelt.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="final" id="finale">
+      <div class="container final-content">
+        <p class="eyebrow reveal">05 / Final Round</p>
+        <h2 class="section-title reveal">Bereit für die nächste Runde?</h2>
+        <p class="section-copy reveal">
+          Ein Format, das Spannung schafft, Menschen verbindet und das Kino neu erlebbar macht.
+        </p>
+
+        <div class="final-actions reveal">
+          <a class="button button-primary" href="#top">X1 noch einmal erleben ↗</a>
+          <a class="button button-outline" href="https://devatikmasud.github.io/Neugestaltung-website/#quiz" target="_blank" rel="noopener">Mehr über X1</a>
+        </div>
+
+        <a class="next-round reveal" href="#top" aria-label="Zurück zum Anfang">↗</a>
+      </div>
+
+      <footer class="footer">
+        <div class="footer-inner">
+          <span>© <span id="year"></span> X1 Quiz Show</span>
+          <div class="footer-links">
+            <a href="#erlebnis">Erlebnis</a>
+            <a href="#digital">Teilnehmen</a>
+            <a href="#top">Nach oben ↑</a>
+          </div>
+        </div>
+      </footer>
+    </section>
+  </main>
+
+  <script>
+    const header = document.getElementById('siteHeader');
+    const progress = document.getElementById('progress');
+    const menuToggle = document.querySelector('.menu-toggle');
+    const mobileLinks = document.querySelectorAll('.mobile-menu a');
+    const heroVideo = document.querySelector('.hero-video');
+    const soundToggle = document.getElementById('soundToggle');
+    const soundIcon = document.getElementById('soundIcon');
+
+    function updateScrollUI() {
+      const y = window.scrollY;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      header.classList.toggle('scrolled', y > 30);
+      progress.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
+    }
+
+    window.addEventListener('scroll', updateScrollUI, { passive: true });
+    updateScrollUI();
+
+    menuToggle.addEventListener('click', () => {
+      const open = document.body.classList.toggle('menu-open');
+      menuToggle.setAttribute('aria-expanded', String(open));
+      menuToggle.setAttribute('aria-label', open ? 'Menü schließen' : 'Menü öffnen');
+    });
+
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        document.body.classList.remove('menu-open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    soundToggle.addEventListener('click', () => {
+      heroVideo.muted = !heroVideo.muted;
+      soundIcon.textContent = heroVideo.muted ? '◉' : '◍';
+      soundToggle.lastChild.textContent = heroVideo.muted ? ' Ton aktivieren' : ' Ton deaktivieren';
+      heroVideo.play().catch(() => {});
+    });
+
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.13 });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    const sections = document.querySelectorAll('main section[id]');
+    const navLinks = document.querySelectorAll('.desktop-nav a:not(.header-cta)');
+
+    const sectionObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`);
+          });
+        }
+      });
+    }, { rootMargin: '-35% 0px -55% 0px' });
+
+    sections.forEach(section => sectionObserver.observe(section));
+
+    const countdownEl = document.getElementById('countdown');
+    const countdownSection = document.getElementById('spannung');
+    let countdownTimer;
+    let countdownStarted = false;
+
+    const countdownObserver = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && !countdownStarted) {
+        countdownStarted = true;
+        let value = 10;
+        countdownEl.textContent = value;
+        countdownTimer = setInterval(() => {
+          value -= 1;
+          countdownEl.textContent = value > 0 ? String(value).padStart(2, '0') : 'X1';
+          if (value <= 0) {
+            clearInterval(countdownTimer);
+            setTimeout(() => {
+              countdownStarted = false;
+            }, 1200);
+          }
+        }, 700);
+      }
+    }, { threshold: 0.45 });
+
+    countdownObserver.observe(countdownSection);
+
+    const answers = document.querySelectorAll('.answer');
+    const quizMessage = document.getElementById('quizMessage');
+
+    answers.forEach(answer => {
+      answer.addEventListener('click', () => {
+        answers.forEach(item => item.classList.remove('selected', 'wrong'));
+
+        if (answer.dataset.correct === 'true') {
+          answer.classList.add('selected');
+          quizMessage.textContent = 'Richtig! +1.000 Punkte';
+        } else {
+          answer.classList.add('wrong');
+          quizMessage.textContent = 'Knapp daneben – versuche es noch einmal.';
+        }
+      });
+    });
+
+    const joinButton = document.getElementById('joinButton');
+    joinButton.addEventListener('click', () => {
+      if (joinButton.dataset.joined === 'true') return;
+      joinButton.dataset.joined = 'true';
+      joinButton.textContent = 'Verbunden ✓';
+      joinButton.style.background = '#ffffff';
+      joinButton.animate(
+        [{ transform: 'scale(1)' }, { transform: 'scale(0.96)' }, { transform: 'scale(1)' }],
+        { duration: 350 }
+      );
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
